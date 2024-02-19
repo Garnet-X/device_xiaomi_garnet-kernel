@@ -98,8 +98,23 @@ echo "Copying DTB"
 cp $out/dtb ./images/dtb.img
 echo "Done"
 
+# VENDOR_DLKM
+echo "Extracting the dlkm kernel modules"
+out=$extract_out/vendor_dlkm
+
+echo "Extracting at $out"
+fsck.erofs --extract="$out" $(get_path vendor_dlkm.img)
+
+echo "Done. Extracting the vendor dlkm"
+
+echo "Copying all dlkm modules"
+for module in $(find $out/lib -name "*.ko" -o -name "modules.load*" -o -name "modules.blocklist"); do
+	echo "Copying $(basename $module)"
+	cp $module ./modules/dlkm/
+done
+
 # Prebuilt images
-for image in dtbo odm vendor vendor_dlkm; do
+for image in dtbo odm vendor; do
     echo "Copying $image"
     cp $(get_path $image.img) images/$image.img
 done
