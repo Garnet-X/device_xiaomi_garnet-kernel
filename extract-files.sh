@@ -61,7 +61,7 @@ echo "Extracting the payload from $ROM_ZIP"
 unzip $ROM_ZIP payload.bin -d $extract_out
 
 echo "Extracting OTA images"
-extract_ota -payload $extract_out/payload.bin -output_dir $extract_out
+extract_ota -payload $extract_out/payload.bin -output_dir $extract_out -partitions boot,dtbo,odm,vendor,vendor_boot,vendor_dlkm
 
 # BOOT
 echo "Extracting the kernel image from boot.img"
