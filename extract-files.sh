@@ -143,8 +143,9 @@ for DTBO_PANEL_PATCH in "${DTBO_PANEL_PATCHES[@]}"; do
             panel_width="$(fdtget -t i "{}" $dt_node "qcom,mdss-pan-physical-width-dimension")";
             fdtput -t li "{}" "$dt_node" qcom,mdss-pan-physical-height-dimension "$((panel_height / 10))";
             fdtput -t li "{}" "$dt_node" qcom,mdss-pan-physical-width-dimension "$((panel_width / 10))";
+            fdtput -t i "{}" "$dt_node" qcom,dsi-supported-dfps-list 60 120 90;
         ' \; \
-        -exec printf "    + Fixed up panel dimensions of ${panel} in dtbo/" \; \
+        -exec printf "    + Fixed up panel dimensions and removed 30hz of ${panel} in dtbo/" \; \
         -exec basename {} \;
 done
 mkdtboimg \
