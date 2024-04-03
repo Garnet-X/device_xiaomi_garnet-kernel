@@ -47,7 +47,7 @@ if [[ -z $ROM_ZIP ]] || [[ ! -f $ROM_ZIP ]]; then
 fi
 
 # Create needed directories
-for dir in ./modules/dlkm ./modules/ramdisk ./images; do
+for dir in ./modules/dlkm ./modules/ramdisk ./images ./images/dtbs; do
     if [[ ! -d $dir ]]; then
     	mkdir -p $dir
     fi
@@ -94,10 +94,6 @@ for module in $(find $out/ramdisk -name "*.ko" -o -name "modules.load*" -o -name
 	cp $module ./modules/ramdisk/
 done
 
-echo "Copying DTB"
-cp $out/dtb ./images/dtb.img
-echo "Done"
-
 # VENDOR_DLKM
 echo "Extracting the dlkm kernel modules"
 out=$extract_out/vendor_dlkm
@@ -113,11 +109,19 @@ for module in $(find $out/lib -name "*.ko" -o -name "modules.load*" -o -name "mo
 	cp $module ./modules/dlkm/
 done
 
-# Prebuilt images
-for image in dtbo; do
-    echo "Copying $image"
-    cp $(get_path $image.img) images/$image.img
-done
+# Extract DTBO and DTBs
+echo "Extracting DTBO and DTBs"
+
+curl -sSL "https://raw.githubusercontent.com/PabloCastellano/extract-dtb/master/extract_dtb/extract_dtb.py" > ${extract_out}/extract_dtb.py
+
+# Copy DTB
+python3 "${extract_out}/extract_dtb.py" "${extract_out}/vendor_boot-out/dtb" -o "${extract_out}/dtbs" > /dev/null
+find "${extract_out}/dtbs" -type f -name "*.dtb" \
+    -exec cp {} ./images/dtbs/ \; \
+    -exec printf "  - dtbs/" \; \
+    -exec basename {} \;
+cp -f "${extract_out}/dtbo.img" ./images/dtbo.img
+echo "Done"
 
 rm -rf $extract_out
 echo "Extracted files successfully"
