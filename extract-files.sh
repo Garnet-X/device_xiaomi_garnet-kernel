@@ -61,7 +61,7 @@ echo "Extracting the payload from $ROM_ZIP"
 unzip $ROM_ZIP payload.bin -d $extract_out
 
 echo "Extracting OTA images"
-extract_ota -payload $extract_out/payload.bin -output_dir $extract_out -partitions boot,dtbo,odm,vendor,vendor_boot,vendor_dlkm
+extract_ota -payload $extract_out/payload.bin -output_dir $extract_out -partitions boot,dtbo,vendor_boot,vendor_dlkm
 
 # BOOT
 echo "Extracting the kernel image from boot.img"
@@ -114,7 +114,7 @@ for module in $(find $out/lib -name "*.ko" -o -name "modules.load*" -o -name "mo
 done
 
 # Prebuilt images
-for image in dtbo odm vendor; do
+for image in dtbo; do
     echo "Copying $image"
     cp $(get_path $image.img) images/$image.img
 done
