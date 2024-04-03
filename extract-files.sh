@@ -47,7 +47,7 @@ if [[ -z $ROM_ZIP ]] || [[ ! -f $ROM_ZIP ]]; then
 fi
 
 # Create needed directories
-for dir in ./modules/ramdisk ./images; do
+for dir in ./modules/dlkm ./modules/ramdisk ./images; do
     if [[ ! -d $dir ]]; then
     	mkdir -p $dir
     fi
