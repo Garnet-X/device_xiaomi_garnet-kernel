@@ -8,6 +8,7 @@ UNPACKBOOTIMG=../../../system/tools/mkbootimg/unpack_bootimg.py
 ROM_ZIP=$1
 
 declare -a DTBO_PANEL_PATCHES=(
+    "Garnet:dsi_n16_41_02_0c_dsc_vid" 
     "Garnet:dsi_n16_42_02_0b_dsc_vid"
     "Garnet:dsi_n16_36_0d_0a_dsc_vid"
 )
